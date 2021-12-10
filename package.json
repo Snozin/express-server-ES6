@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "npm-run-all clean transpile",
+    "build": "babel server --out-dir transp-server",
     "clean": "rimraf transp-server",
-    "dev": "cross-env NODE_ENV=development npm-run-all build server",
-    "prod": "cross-env NODE_ENV=production npm-run-all build server",
-    "server": "node ./transp-server/bin/www",
-    "start": "npm run prod",
-    "transpile": "babel ./server --out-dir transp-server"
+    "dev": "cross-env NODE_ENV=development DEBUG=APPNAMEHERE:* nodemon",
+    "start": "cross-env NODE_ENV=production npm run build && npm run server",
+    "server": "node transp-server/bin/www",
+    "example": "babel server --watch --out-dir transp-server",
+    "maybe": "npm run clean && npm run build"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -34,8 +34,12 @@
     ]
   },
   "nodemonConfig": {
-    "exec": "npm run dev",
-    "watch": ["server/*", "public/*"],
-    "ignore":[]
+    "exec": "npm run build && npm run server",
+    "watch": [
+      "server/*",
+      "public/*",
+      "lib/*"
+    ],
+    "ignore": []
   }
 }
